@@ -29,6 +29,18 @@ class Customer {
         return results.rows.map(c => new Customer(c));
     }
 
+    static async search(name) {
+        const results = await db.query(`SELECT id,
+                                               first_name AS "firstName",
+                                               last_name  AS "lastName",
+                                               phone,
+                                               notes
+                                        FROM customers
+                                        WHERE LOWER(concat(first_name, ' ', last_name)) LIKE LOWER('%${name}%')`)
+        return results.rows.map(c => new Customer(c));
+
+    }
+
     /** get a customer by ID. */
 
     static async get(id) {
